@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>House Price Prediction</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header class="hero">
+
+        <div class="hero-inner">
+
+            <div class="hero-left">
+
+                <div class="logo-circle">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+
+                <div class="hero-copy">
+
+                    <h1>
+                        House Price Prediction
+                    </h1>
+
+                    <h2>
+                        Using Artificial Neural Network (ANN)
+                    </h2>
+
+                    <p>
+                        Enter the details of the house below to predict its price
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="hero-image">
+
+                <img
+                    src="{{ url_for('static', filename='images/header-house.jpg') }}"
+                    alt="Modern House"
+                >
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="main-wrapper">
+
+        <section class="form-card">
+
+            <div class="card-title">
+
+                <div class="title-icon">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Enter House Details
+                    </h3>
+
+                    <p>
+                        Fill in the features of the house to get an estimated price
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form action="/predict" method="POST">
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-globe"></i>
+                            </span>
+
+                            Longitude
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="longitude"
+                            placeholder="-122.2300"
+                            value="{{ submitted.longitude if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-globe"></i>
+                            </span>
+
+                            Latitude
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="latitude"
+                            placeholder="37.8800"
+                            value="{{ submitted.latitude if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-regular fa-calendar"></i>
+                            </span>
+
+                            Housing Median Age (years)
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="housing_median_age"
+                            placeholder="41"
+                            value="{{ submitted.housing_median_age if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-house"></i>
+                            </span>
+
+                            Total Rooms
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="total_rooms"
+                            placeholder="880"
+                            value="{{ submitted.total_rooms if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-bed"></i>
+                            </span>
+
+                            Total Bedrooms
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="total_bedrooms"
+                            placeholder="129"
+                            value="{{ submitted.total_bedrooms if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-user-group"></i>
+                            </span>
+
+                            Population
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="population"
+                            placeholder="322"
+                            value="{{ submitted.population if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </span>
+
+                            Households
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="households"
+                            placeholder="126"
+                            value="{{ submitted.households if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-dollar-sign"></i>
+                            </span>
+
+                            Median Income (tens of thousands)
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="any"
+                            name="median_income"
+                            placeholder="8.3252"
+                            value="{{ submitted.median_income if submitted else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field full-width">
+
+                        <label>
+
+                            <span class="field-icon">
+                                <i class="fa-solid fa-water"></i>
+                            </span>
+
+                            Ocean Proximity
+
+                        </label>
+
+
+                        <select
+                            name="ocean_proximity"
+                            required
+                        >
+
+                            <option
+                                value="<1H OCEAN"
+                                {% if submitted and submitted.ocean_proximity == '<1H OCEAN' %}
+                                selected
+                                {% endif %}
+                            >
+                                &lt;1H OCEAN
+                            </option>
+
+
+                            <option
+                                value="INLAND"
+                                {% if submitted and submitted.ocean_proximity == 'INLAND' %}
+                                selected
+                                {% endif %}
+                            >
+                                INLAND
+                            </option>
+
+
+                            <option
+                                value="ISLAND"
+                                {% if submitted and submitted.ocean_proximity == 'ISLAND' %}
+                                selected
+                                {% endif %}
+                            >
+                                ISLAND
+                            </option>
+
+
+                            <option
+                                value="NEAR BAY"
+                                {% if submitted and submitted.ocean_proximity == 'NEAR BAY' %}
+                                selected
+                                {% endif %}
+                            >
+                                NEAR BAY
+                            </option>
+
+
+                            <option
+                                value="NEAR OCEAN"
+                                {% if submitted and submitted.ocean_proximity == 'NEAR OCEAN' %}
+                                selected
+                                {% endif %}
+                            >
+                                NEAR OCEAN
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="full-width">
+
+                        <button
+                            class="predict-btn"
+                            type="submit"
+                        >
+
+                            <i class="fa-solid fa-calculator"></i>
+
+                            Predict Price
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <aside class="right-column">
+
+            <section class="prediction-card">
+
+                <p class="prediction-heading">
+                    Predicted House Price
+                </p>
+
+                <div class="prediction-price">
+
+                    {% if prediction_text %}
+                        {{ prediction_text }}
+                    {% else %}
+                        $---
+                    {% endif %}
+
+                </div>
+
+                <p class="prediction-caption">
+                    Estimated Price
+                </p>
+
+                <img
+                    class="prediction-house"
+                    src="{{ url_for('static', filename='images/prediction-house.png') }}"
+                    alt="House"
+                >
+
+                {% if error_text %}
+
+                    <div class="error-message">
+                        {{ error_text }}
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <section class="info-card">
+
+                <div class="info-heading">
+
+                    <span class="info-icon blue">
+                        <i class="fa-solid fa-info"></i>
+                    </span>
+
+                    <h3>
+                        About the Model
+                    </h3>
+
+                </div>
+
+
+                <p class="info-description">
+
+                    This prediction is made using an Artificial Neural Network
+                    (ANN) trained on the California Housing dataset.
+                    The model considers various features of the property
+                    to estimate the price.
+
+                </p>
+
+
+                <div class="divider"></div>
+
+
+                <div class="info-heading">
+
+                    <span class="bars-icon">
+                        <i class="fa-solid fa-chart-simple"></i>
+                    </span>
+
+                    <h3>
+                        Features Used
+                    </h3>
+
+                </div>
+
+
+                <ul class="feature-list">
+
+                    <li>
+                        Geographical Location (Longitude, Latitude)
+                    </li>
+
+                    <li>
+                        Housing Characteristics (Rooms, Bedrooms, Age)
+                    </li>
+
+                    <li>
+                        Population & Households
+                    </li>
+
+                    <li>
+                        Median Income
+                    </li>
+
+                    <li>
+                        Ocean Proximity
+                    </li>
+
+                </ul>
+
+            </section>
+
+        </aside>
+
+    </main>
+
+
+    <footer>
+
+        © 2026 House Price Prediction System
+
+        <span>|</span>
+
+        Built with Flask & TensorFlow
+
+        <i class="fa-regular fa-heart"></i>
+
+    </footer>
+
+</body>
+
+</html>
